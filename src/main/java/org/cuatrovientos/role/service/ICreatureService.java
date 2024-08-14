@@ -10,9 +10,9 @@ public interface ICreatureService {
 	
     Optional<Creature> findById(Long id);
 
-    Creature save(Creature creature);
+    Creature save(Creature Creature);
     
-    void delete(Creature creature);
+    void delete(Creature Creature);
 
     Iterable<Creature> findAll();   
     

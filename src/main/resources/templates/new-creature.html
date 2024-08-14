@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+	<title>creatures</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+</head>
+
+<body>
+	<navbar th:insert="fragments/general.html :: navbar"> </navbar>
+
+	<hr>
+
+	<main >
+		<div class="container ml-3 mt-4">
+				<h2>New Creature</h2>
+
+				<form th:action="@{/creatures}" th:object="${creature}" method="post" class="mt-4">
+					<div class="form-group row">
+						<div class="my-2 mx-5">
+							<label for="name col-form-label col-2">Name</label>
+							<input type="text" th:field="*{name}" id="name" class="form-control col-6 ms-2"
+								placeholder="Enter creature Name" />
+						</div>
+						<div class="my-2 mx-5">
+							<label for="name col-form-label col-2">Abilities</label>
+							<input type="text" th:field="*{abilities}" id="abilities" class="form-control col-6 ms-2"
+								placeholder="Enter creature abilities" />
+						</div>
+						<div class="my-2 mx-5">
+							<label for="name col-form-label col-2">Avatar</label>
+							<input type="text" th:field="*{avatar}" id="avatar" class="form-control col-6 ms-2"
+								placeholder="Enter creature avatar" />
+						</div>
+						
+						<div class="my-2 mx-5">
+							<input type="submit" value="Save creature" class="btn btn-primary ms-2 col-4" />
+						</div>
+						
+						
+					</div>
+					<p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger" />
+				</form>
+			</div>
+	 </main>
+
+	<footer th:insert="fragments/general.html :: footer">asdfddd </footer>
+</body>
+
+</html>

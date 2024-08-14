@@ -24,11 +24,11 @@ public class CreatureServiceImp implements ICreatureService {
     }
 
     @Override
-    public Creature save(Creature creature) {
-        if (StringUtils.isEmpty(creature.getId())) {
-        	creature.setDateCreated(LocalDate.now());
+    public Creature save(Creature Creature) {
+        if (StringUtils.isEmpty(Creature.getId())) {
+            Creature.setDateCreated(LocalDate.now());
         }
-        return creatureRepository.save(creature);
+        return creatureRepository.save(Creature);
     }
 
     @Override
@@ -37,8 +37,8 @@ public class CreatureServiceImp implements ICreatureService {
     }
 
 	@Override
-	public void delete(Creature creature) {
-		creatureRepository.delete(creature);
+	public void delete(Creature Creature) {
+		creatureRepository.delete(Creature);
 	}
 
   

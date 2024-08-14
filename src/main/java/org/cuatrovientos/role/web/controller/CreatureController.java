@@ -6,17 +6,18 @@ import java.util.List;
 import org.cuatrovientos.role.persistence.model.Creature;
 import org.cuatrovientos.role.service.ICreatureService;
 import org.cuatrovientos.role.web.dto.CreatureDto;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 @RequestMapping(value = "/creatures")
 public class CreatureController {
 	
@@ -27,54 +28,64 @@ public class CreatureController {
 	}
 	
     @GetMapping
-    public List<CreatureDto> getCreatures() {
-        Iterable<Creature> creatures = creatureSercice.findAll();
-        List<CreatureDto> creatureDtos = new ArrayList<>();
-        creatures.forEach(p -> creatureDtos.add(convertCreatureToDto(p)));
-        return creatureDtos;
+    public String getCreatures(Model model) {
+        Iterable<Creature> Creatures = creatureSercice.findAll();
+        List<CreatureDto> CreatureDtos = new ArrayList<>();
+        Creatures.forEach(p -> CreatureDtos.add(convertCreatureToDto(p)));
+        model.addAttribute("creatures", CreatureDtos);
+        return "creatures";
+    }
+
+    @GetMapping("/new")
+    public String newCreature(Model model) {
+        model.addAttribute("creature", new CreatureDto());
+        return "new-creature";
     }
 
     @GetMapping("/details/{id}")
-    public CreatureDto getCreature(@PathVariable Long id) {
-        Creature creature = creatureSercice.findById(id)
+    public String getCreature(@PathVariable Long id, Model model) {
+        Creature Creature = creatureSercice.findById(id)
             .get();
-        return convertCreatureToDto(creature);
+        model.addAttribute("creature", convertCreatureToDto(Creature));
+        return "creature";
     }
     @GetMapping("/edit/{id}")
-    public CreatureDto editCreature(@PathVariable Long id) {
-        Creature creature = creatureSercice.findById(id)
+    public String editCreature(@PathVariable Long id, Model model) {
+        Creature Creature = creatureSercice.findById(id)
             .get();
-        return convertCreatureToDto(creature);
+        model.addAttribute("creature", convertCreatureToDto(Creature));
+        return "edit-creature";
     }
     
     @GetMapping("/delete/{id}")
-    public Creature deleteCreature(@ModelAttribute("Creature") CreatureDto creature, BindingResult bindingResult) {
+    public String deleteCreature(@ModelAttribute("Creature") CreatureDto Creature, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new Creature();
+            return "creatures";
         }
 
-        return convertCreatureToEntity(creature);
+        creatureSercice.delete(convertCreatureToEntity(Creature));
+        return "redirect:/creatures";
     }
     
     @PostMapping("/edit/{id}")
-    public Creature modifyCreature(@ModelAttribute("Creature") CreatureDto creature, BindingResult bindingResult) {
+    public String modifyCreature(@ModelAttribute("Creature") CreatureDto Creature, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new Creature();
+            return "edit-creature";
         }
 
-        Creature newCreature = creatureSercice.save(convertCreatureToEntity(creature));
-        return newCreature;
+        Creature newCreature = creatureSercice.save(convertCreatureToEntity(Creature));
+        return "redirect:/creatures";
     }	
 	
 
     @PostMapping
-    public Creature addCreature(@ModelAttribute("Creature") CreatureDto Creature, BindingResult bindingResult) {
+    public String addCreature(@ModelAttribute("Creature") CreatureDto Creature, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new Creature();
+            return "new-creature";
         }
 
         Creature newCreature = creatureSercice.save(convertCreatureToEntity(Creature));
-        return newCreature;
+        return "redirect:/creatures";
     }	
 	
 	///
@@ -87,10 +98,10 @@ public class CreatureController {
 	}
 
 	protected Creature convertCreatureToEntity(CreatureDto dto) {
-		Creature creature = new Creature(dto.getId(), dto.getName(), dto.getAbilities(), dto.getAvatar());
+		Creature Creature = new Creature(dto.getId(), dto.getName(), dto.getAbilities(), dto.getAvatar());
 		if (!StringUtils.isEmpty(dto.getId())) {
-			creature.setId(dto.getId());
+			Creature.setId(dto.getId());
 		}
-		return creature;
+		return Creature;
 	}
 }
