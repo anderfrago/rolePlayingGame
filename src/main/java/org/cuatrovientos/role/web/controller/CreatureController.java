@@ -44,47 +44,47 @@ public class CreatureController {
 
     @GetMapping("/details/{id}")
     public String getCreature(@PathVariable Long id, Model model) {
-        Creature Creature = creatureSercice.findById(id)
+        Creature creature = creatureSercice.findById(id)
             .get();
-        model.addAttribute("creature", convertCreatureToDto(Creature));
+        model.addAttribute("creature", convertCreatureToDto(creature));
         return "creature";
     }
     @GetMapping("/edit/{id}")
     public String editCreature(@PathVariable Long id, Model model) {
-        Creature Creature = creatureSercice.findById(id)
+        Creature creature = creatureSercice.findById(id)
             .get();
-        model.addAttribute("creature", convertCreatureToDto(Creature));
+        model.addAttribute("creature", convertCreatureToDto(creature));
         return "edit-creature";
     }
     
     @GetMapping("/delete/{id}")
-    public String deleteCreature(@ModelAttribute("Creature") CreatureDto Creature, BindingResult bindingResult) {
+    public String deleteCreature(@ModelAttribute("Creature") CreatureDto creature, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "creatures";
         }
 
-        creatureSercice.delete(convertCreatureToEntity(Creature));
+        creatureSercice.delete(convertCreatureToEntity(creature));
         return "redirect:/creatures";
     }
     
     @PostMapping("/edit/{id}")
-    public String modifyCreature(@ModelAttribute("Creature") CreatureDto Creature, BindingResult bindingResult) {
+    public String modifyCreature(@ModelAttribute("Creature") CreatureDto creature, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "edit-creature";
         }
 
-        Creature newCreature = creatureSercice.save(convertCreatureToEntity(Creature));
+        Creature newCreature = creatureSercice.save(convertCreatureToEntity(creature));
         return "redirect:/creatures";
     }	
 	
 
     @PostMapping
-    public String addCreature(@ModelAttribute("Creature") CreatureDto Creature, BindingResult bindingResult) {
+    public String addCreature(@ModelAttribute("Creature") CreatureDto creature, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "new-creature";
         }
 
-        Creature newCreature = creatureSercice.save(convertCreatureToEntity(Creature));
+        Creature newCreature = creatureSercice.save(convertCreatureToEntity(creature));
         return "redirect:/creatures";
     }	
 	
